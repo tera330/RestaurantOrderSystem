@@ -28,6 +28,7 @@ import com.example.ordersystem.data.Menu
 fun GridMenu(
     modifier: Modifier,
     items: List<Menu>,
+    selectCurrentMenu: (String, String, Int) -> Unit,
 ) {
     Column(
         Modifier,
@@ -41,6 +42,7 @@ fun GridMenu(
                             name = items[i + j].name,
                             price = items[i + j].price,
                             imageResId = items[i + j].imageResId,
+                            selectCurrentMenu = selectCurrentMenu,
                         )
                     }
                 }
@@ -55,41 +57,47 @@ fun Menu(
     name: String,
     price: String,
     imageResId: Int,
+    selectCurrentMenu: (String, String, Int) -> Unit,
 ) {
     Box(
         modifier
             .background(Color.White)
             .size(250.dp, 250.dp)
-            .clickable {},
+            .clickable {
+                selectCurrentMenu(name, price, imageResId)
+            },
     ) {
-        Image(
-            painter = painterResource(id = imageResId),
-            contentDescription = null,
-            modifier =
-                modifier
-                    .fillMaxWidth(),
-        )
-        Column(
-            modifier =
-                modifier
-                    .fillMaxHeight()
-                    .padding(5.dp),
-            verticalArrangement = Arrangement.Bottom,
-        ) {
-            Text(
-                text = name,
-                fontSize = 22.sp,
-                color = Color.White,
-                fontWeight = FontWeight.Bold,
-                fontFamily = FontFamily.Serif,
+        // 値が初期値じゃないときにメニュー画像を表示
+        if (name != "" && price != "" && imageResId != 0) {
+            Image(
+                painter = painterResource(id = imageResId),
+                contentDescription = null,
+                modifier =
+                    modifier
+                        .fillMaxWidth(),
             )
-            Text(
-                modifier = modifier.padding(top = 5.dp),
-                text = price,
-                color = Color.White,
-                fontSize = 15.sp,
-                fontFamily = FontFamily.Serif,
-            )
+            Column(
+                modifier =
+                    modifier
+                        .fillMaxHeight()
+                        .padding(5.dp),
+                verticalArrangement = Arrangement.Bottom,
+            ) {
+                Text(
+                    text = name,
+                    fontSize = 22.sp,
+                    color = Color.White,
+                    fontWeight = FontWeight.Bold,
+                    fontFamily = FontFamily.Serif,
+                )
+                Text(
+                    modifier = modifier.padding(top = 5.dp),
+                    text = price,
+                    color = Color.White,
+                    fontSize = 15.sp,
+                    fontFamily = FontFamily.Serif,
+                )
+            }
         }
     }
 }
@@ -103,6 +111,7 @@ fun PreviewMenu() {
             name = "ネギトロ丼",
             price = "700円",
             imageResId = R.drawable.negitoro_don,
+            selectCurrentMenu = { name, price, imageResId -> },
         )
     }
 }

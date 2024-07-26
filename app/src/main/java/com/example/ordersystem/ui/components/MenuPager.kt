@@ -22,7 +22,10 @@ import kotlinx.coroutines.launch
 
 @ExperimentalFoundationApi
 @Composable
-fun MenuPager(modifier: Modifier = Modifier) {
+fun MenuPager(
+    modifier: Modifier = Modifier,
+    selectCurrentMenu: (String, String, Int) -> Unit,
+) {
     val itemsPerPage = 8
     val pageCount = (SUSHI_MENU.size + itemsPerPage - 1) / itemsPerPage
 
@@ -44,7 +47,11 @@ fun MenuPager(modifier: Modifier = Modifier) {
             val startIndex = page * itemsPerPage
             val endIndex = minOf(startIndex + itemsPerPage, SUSHI_MENU.size)
             val itemsForPage = SUSHI_MENU.subList(startIndex, endIndex)
-            GridMenu(modifier = modifier, items = itemsForPage)
+            GridMenu(
+                modifier = modifier,
+                items = itemsForPage,
+                selectCurrentMenu = selectCurrentMenu,
+            )
         }
         Spacer(modifier = modifier.weight(1f))
         Row(
@@ -85,5 +92,8 @@ fun MenuPager(modifier: Modifier = Modifier) {
 @Composable
 @Preview
 fun PreviewMenuPager() {
-    MenuPager(modifier = Modifier)
+    MenuPager(
+        modifier = Modifier,
+        selectCurrentMenu = { name, price, imageResId -> },
+    )
 }

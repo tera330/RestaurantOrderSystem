@@ -3,6 +3,7 @@ package com.example.ordersystem
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -25,9 +26,13 @@ import com.example.ordersystem.ui.components.OrderScreen
 import com.example.ordersystem.ui.components.TopMenu
 import com.example.ordersystem.ui.components.VerticalDivider
 import com.example.ordersystem.ui.theme.OrderSystemTheme
+import com.example.ordersystem.uistate.HomeUiState
+import com.example.ordersystem.viewmodel.HomeViewModel
 
 @ExperimentalFoundationApi
 class MainActivity : ComponentActivity() {
+    private val homeViewModel: HomeViewModel by viewModels()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -36,7 +41,18 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background,
                 ) {
-                    Home(modifier = Modifier)
+                    val homeUiState = homeViewModel.homeUiState
+
+                    Home(
+                        modifier = Modifier,
+                        selectCurrentMenu = { name, price, imageResId ->
+                            homeViewModel.selectCurrentMenu(name = name, price = price, imageResId = imageResId)
+                        },
+                        addOrder = { name, price, imageResId ->
+                            homeViewModel.addOrder(name = name, price = price, imageResId = imageResId)
+                        },
+                        homeUiState = homeUiState,
+                    )
                 }
             }
         }
@@ -45,7 +61,12 @@ class MainActivity : ComponentActivity() {
 
 @ExperimentalFoundationApi
 @Composable
-fun Home(modifier: Modifier = Modifier) {
+fun Home(
+    modifier: Modifier = Modifier,
+    selectCurrentMenu: (String, String, Int) -> Unit,
+    addOrder: (String, String, Int) -> Unit,
+    homeUiState: HomeUiState,
+) {
     // composableの背景用
     Box(
         modifier
@@ -66,7 +87,7 @@ fun Home(modifier: Modifier = Modifier) {
                         .padding(top = 15.dp, bottom = 10.dp, start = 5.dp, end = 5.dp),
             ) {
                 TopMenu(modifier = modifier, topMenu = TOP_MENU)
-                MenuPager(modifier = modifier)
+                MenuPager(modifier = modifier, selectCurrentMenu = selectCurrentMenu)
             }
 
             VerticalDivider(modifier = Modifier, thickness = 2.dp, color = Color.White)
@@ -77,7 +98,11 @@ fun Home(modifier: Modifier = Modifier) {
                         .weight(2f)
                         .fillMaxHeight(),
             ) {
-                OrderScreen(modifier = modifier)
+                OrderScreen(
+                    modifier = modifier,
+                    homeUiState = homeUiState,
+                    addOrder = addOrder,
+                )
             }
         }
     }
@@ -88,6 +113,11 @@ fun Home(modifier: Modifier = Modifier) {
 @Composable
 fun GreetingPreview() {
     OrderSystemTheme {
-        Home(Modifier)
+        Home(
+            modifier = Modifier,
+            selectCurrentMenu = { name, price, imageResId -> },
+            addOrder = { name, price, imageResId -> },
+            homeUiState = HomeUiState(),
+        )
     }
 }

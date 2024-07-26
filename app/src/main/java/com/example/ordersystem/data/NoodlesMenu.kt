@@ -1,17 +1,15 @@
 package com.example.ordersystem.data
 
-/*
-val NOODLE_MENU = listOf(
-    Menu("しょうゆラーメン", "700円", R.drawable.shoyu_ramen),
-    Menu("みそラーメン", "750円", R.drawable.miso_ramen),
-    Menu("しおラーメン", "700円", R.drawable.shio_ramen),
-    Menu("とんこつラーメン", "800円", R.drawable.tonkotsu_ramen),
-    Menu("担々麺", "850円", R.drawable.tantanmen),
-    Menu("かけうどん", "500円", R.drawable.kake_udon),
-    Menu("きつねうどん", "600円", R.drawable.kitsune_udon),
-    Menu("たぬきうどん", "600円", R.drawable.tanuki_udon),
-    Menu("肉うどん", "700円", R.drawable.niku_udon),
-    Menu("カレーうどん", "750円", R.drawable.curry_udon)
-)
+import com.example.ordersystem.R
 
- */
+val NOODLE_MENU =
+    listOf(
+    Menu(22, "しょうゆラーメン", "700円", R.drawable.shoyu_ramen, 0),
+    Menu(23, "みそラーメン", "750円", R.drawable.miso_ramen, 0),
+    Menu(24, "しおラーメン", "700円", R.drawable.shio_ramen, 0),
+    Menu(25, "とんこつラーメン", "800円", R.drawable.tonkotsu_ramen, 0),
+    Menu(26, "担々麺", "850円", R.drawable.tantanmen, 0),
+    Menu(27, "かけうどん", "500円", R.drawable.kake_udon, 0),
+    Menu(28, "肉うどん", "700円", R.drawable.niku_udon, 0),
+    Menu(29, "カレーうどん", "750円", R.drawable.curry_udon, 0)
+)

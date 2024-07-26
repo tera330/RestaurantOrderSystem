@@ -1,5 +1,6 @@
 package com.example.ordersystem.ui.components
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -31,10 +32,14 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.ordersystem.data.SUSHI_MENU
+import com.example.ordersystem.uistate.HomeUiState
 
 @Composable
-fun OrderScreen(modifier: Modifier) {
+fun OrderScreen(
+    modifier: Modifier,
+    homeUiState: HomeUiState,
+    addOrder: (String, String, Int) -> Unit,
+) {
     val orderCount = 1
     // UI開発時の仮注文リスト
     val orderList = listOf("まぐろ", "さば", "たまご", "えび", "まぐろ", "さば", "たまご", "えび")
@@ -50,9 +55,10 @@ fun OrderScreen(modifier: Modifier) {
             modifier =
                 modifier
                     .padding(2.dp),
-            name = SUSHI_MENU[0].name,
-            price = SUSHI_MENU[0].price,
-            imageResId = SUSHI_MENU[0].imageResId,
+            name = homeUiState.currentMenu.name,
+            price = homeUiState.currentMenu.price,
+            imageResId = homeUiState.currentMenu.imageResId,
+            selectCurrentMenu = { name, price, imageResId -> },
         )
 
         Column(modifier.padding(10.dp)) {
@@ -83,7 +89,11 @@ fun OrderScreen(modifier: Modifier) {
                     )
                 }
                 Button(
-                    onClick = { /*TODO*/ },
+                    onClick = {
+                        // Log.d("result", homeUiState.currentOrderList.toString() + "追加前")
+                        addOrder(homeUiState.currentMenu.name, homeUiState.currentMenu.price, homeUiState.currentMenu.imageResId)
+                        // Log.d("result", homeUiState.currentOrderList.toString() + "追加後")
+                    },
                     shape = CircleShape,
                     contentPadding = PaddingValues(5.dp),
                     colors =
@@ -177,5 +187,9 @@ fun OrderScreen(modifier: Modifier) {
 @Preview
 @Composable
 fun PreviewOrderScreen() {
-    OrderScreen(modifier = Modifier)
+    OrderScreen(
+        modifier = Modifier,
+        addOrder = { name, price, imagaResId -> },
+        homeUiState = HomeUiState(),
+    )
 }

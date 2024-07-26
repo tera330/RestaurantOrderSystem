@@ -21,9 +21,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.ordersystem.data.TOP_MENU
+import com.example.ordersystem.ui.components.MenuCategory
 import com.example.ordersystem.ui.components.MenuPager
 import com.example.ordersystem.ui.components.OrderScreen
-import com.example.ordersystem.ui.components.TopMenu
 import com.example.ordersystem.ui.components.VerticalDivider
 import com.example.ordersystem.ui.theme.OrderSystemTheme
 import com.example.ordersystem.uistate.HomeUiState
@@ -46,12 +46,19 @@ class MainActivity : ComponentActivity() {
                     Home(
                         modifier = Modifier,
                         selectCurrentMenu = { id, name, price, imageResId, quantity ->
-                            homeViewModel.selectCurrentMenu(id = id, name = name, price = price, imageResId = imageResId, quantity = quantity)
+                            homeViewModel.selectCurrentMenu(
+                                id = id,
+                                name = name,
+                                price = price,
+                                imageResId = imageResId,
+                                quantity = quantity,
+                            )
                         },
                         addOrder = { id, name, price, imageResId, quantity ->
                             homeViewModel.addOrder(id = id, name = name, price = price, imageResId = imageResId, quantity = quantity)
                         },
                         homeUiState = homeUiState,
+                        selectCategory = { categoryName -> homeViewModel.selectCategory(categoryName) },
                     )
                 }
             }
@@ -66,6 +73,7 @@ fun Home(
     selectCurrentMenu: (Int, String, String, Int, Int) -> Unit,
     addOrder: (Int, String, String, Int, Int) -> Unit,
     homeUiState: HomeUiState,
+    selectCategory: (String) -> Unit,
 ) {
     // composableの背景用
     Box(
@@ -86,8 +94,8 @@ fun Home(
                         .weight(8f)
                         .padding(top = 15.dp, bottom = 10.dp, start = 5.dp, end = 5.dp),
             ) {
-                TopMenu(modifier = modifier, topMenu = TOP_MENU)
-                MenuPager(modifier = modifier, selectCurrentMenu = selectCurrentMenu)
+                MenuCategory(modifier = modifier, topMenu = TOP_MENU, selectCategory = selectCategory)
+                MenuPager(modifier = modifier, selectCurrentMenu = selectCurrentMenu, homeUiState = homeUiState)
             }
 
             VerticalDivider(modifier = Modifier, thickness = 2.dp, color = Color.White)
@@ -118,6 +126,7 @@ fun GreetingPreview() {
             selectCurrentMenu = { id, name, price, imageResId, quantity -> },
             addOrder = { id, name, price, imageResId, quantity -> },
             homeUiState = HomeUiState(),
+            selectCategory = {},
         )
     }
 }

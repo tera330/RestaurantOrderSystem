@@ -17,7 +17,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.ordersystem.data.DESSERT_MENU
+import com.example.ordersystem.data.NOODLE_MENU
+import com.example.ordersystem.data.RICE_BOWL_MENU
 import com.example.ordersystem.data.SUSHI_MENU
+import com.example.ordersystem.uistate.HomeUiState
 import kotlinx.coroutines.launch
 
 @ExperimentalFoundationApi
@@ -25,12 +29,20 @@ import kotlinx.coroutines.launch
 fun MenuPager(
     modifier: Modifier = Modifier,
     selectCurrentMenu: (Int, String, String, Int, Int) -> Unit,
+    homeUiState: HomeUiState,
 ) {
     val itemsPerPage = 8
     val pageCount = (SUSHI_MENU.size + itemsPerPage - 1) / itemsPerPage
-
     val pagerState = rememberPagerState(pageCount = { pageCount })
     val scope = rememberCoroutineScope()
+    val category =
+        when (homeUiState.currentMenuCategory) {
+            "寿司" -> SUSHI_MENU
+            "ご飯・丼" -> RICE_BOWL_MENU
+            "麺" -> NOODLE_MENU
+            "デザート" -> DESSERT_MENU
+            else -> emptyList()
+        }
 
     Column(
         modifier =
@@ -45,8 +57,8 @@ fun MenuPager(
             state = pagerState,
         ) { page ->
             val startIndex = page * itemsPerPage
-            val endIndex = minOf(startIndex + itemsPerPage, SUSHI_MENU.size)
-            val itemsForPage = SUSHI_MENU.subList(startIndex, endIndex)
+            val endIndex = minOf(startIndex + itemsPerPage, category.size)
+            val itemsForPage = category.subList(startIndex, endIndex)
             GridMenu(
                 modifier = modifier,
                 items = itemsForPage,
@@ -95,5 +107,6 @@ fun PreviewMenuPager() {
     MenuPager(
         modifier = Modifier,
         selectCurrentMenu = { id, name, price, imageResId, quantity -> },
+        homeUiState = HomeUiState(),
     )
 }

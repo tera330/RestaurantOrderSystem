@@ -5,5 +5,5 @@ data class Menu(
     val name: String,
     val price: String,
     val imageResId: Int,
-    var quantity: Int
+    var quantity: Int,
 )

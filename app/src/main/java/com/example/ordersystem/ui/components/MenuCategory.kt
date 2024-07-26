@@ -17,9 +17,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 @Composable
-fun TopMenu(
+fun MenuCategory(
     modifier: Modifier,
     topMenu: List<String>,
+    selectCategory: (String) -> Unit,
 ) {
     Row(
         modifier
@@ -28,7 +29,9 @@ fun TopMenu(
     ) {
         for ((index, item) in topMenu.withIndex()) {
             Button(
-                onClick = {},
+                onClick = {
+                    selectCategory(item)
+                },
                 modifier.weight(1f),
                 shape = CutCornerShape(0.dp),
                 colors =

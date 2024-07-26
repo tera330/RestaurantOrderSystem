@@ -14,18 +14,22 @@ class HomeViewModel : ViewModel() {
 
     // メニューが選択されたとき
     fun selectCurrentMenu(
+        id: Int,
         name: String,
         price: String,
         imageResId: Int,
+        quantity: Int
     ) {
         Log.d("result", homeUiState.currentMenu.toString() + "変更前")
         homeUiState =
             homeUiState.copy(
                 currentMenu =
                     Menu(
+                        id = id,
                         name = name,
                         price = price,
                         imageResId = imageResId,
+                        quantity =  quantity
                     ),
             )
         Log.d("result", homeUiState.currentMenu.toString() + "変更後")
@@ -33,28 +37,48 @@ class HomeViewModel : ViewModel() {
 
     // メニューが選択され、＋ボタンが押されたとき
     fun addOrder(
+        id: Int,
         name: String,
         price: String,
         imageResId: Int,
+        quantity: Int
     ) {
-        val newMenu = Menu(name = name, price = price, imageResId = imageResId)
+        val newMenu = Menu(
+            id = id,
+            name = name,
+            price = price,
+            imageResId = imageResId,
+            quantity = 1 // 注文リストに追加した時点で１つ以上になるため
+        )
 
-        homeUiState =
-            homeUiState.copy(
-                currentOrderList =
-                    homeUiState.currentOrderList.apply {
-                        add(newMenu)
-                    },
-            )
+        val existingMenu = homeUiState.currentOrderList.find { it.id == id }
+        if (existingMenu != null) {
+            homeUiState.currentOrderList = homeUiState.currentOrderList.map {
+                if (it.id == id) it.copy(quantity = it.quantity + 1) else it
+            }.toMutableList()
+        } else {
+            homeUiState.currentOrderList = homeUiState.currentOrderList.toMutableList().apply {
+                add(newMenu)
+            }
+        }
+        homeUiState = homeUiState.copy(currentOrderList = homeUiState.currentOrderList)
     }
 
     // メニューが選択され、ーボタンが押されたとき
     fun removeOrder(
+        id: Int,
         name: String,
         price: String,
         imageResId: Int,
+        quantity: Int
     ) {
-        val removeMenu = Menu(name = name, price = price, imageResId = imageResId)
+        val removeMenu = Menu(
+            id = id,
+            name = name,
+            price = price,
+            imageResId = imageResId,
+            quantity = quantity
+        )
 
         /*
         homeUiState = homeUiState.copy(

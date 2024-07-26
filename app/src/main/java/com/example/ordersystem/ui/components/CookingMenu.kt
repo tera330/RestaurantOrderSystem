@@ -28,7 +28,7 @@ import com.example.ordersystem.data.Menu
 fun GridMenu(
     modifier: Modifier,
     items: List<Menu>,
-    selectCurrentMenu: (String, String, Int) -> Unit,
+    selectCurrentMenu: (Int, String, String, Int, Int) -> Unit,
 ) {
     Column(
         Modifier,
@@ -38,10 +38,12 @@ fun GridMenu(
                 for (j in 0 until 4) {
                     if (i + j < items.size) {
                         Menu(
-                            Modifier.padding(2.dp),
+                            modifier = Modifier.padding(2.dp),
+                            id = items[i + j].id,
                             name = items[i + j].name,
                             price = items[i + j].price,
                             imageResId = items[i + j].imageResId,
+                            quantity = items[i + j].quantity,
                             selectCurrentMenu = selectCurrentMenu,
                         )
                     }
@@ -54,21 +56,23 @@ fun GridMenu(
 @Composable
 fun Menu(
     modifier: Modifier,
+    id: Int,
     name: String,
     price: String,
     imageResId: Int,
-    selectCurrentMenu: (String, String, Int) -> Unit,
+    quantity: Int,
+    selectCurrentMenu: (Int, String, String, Int, Int) -> Unit,
 ) {
     Box(
         modifier
             .background(Color.White)
             .size(250.dp, 250.dp)
             .clickable {
-                selectCurrentMenu(name, price, imageResId)
+                selectCurrentMenu(id, name, price, imageResId, quantity)
             },
     ) {
         // 値が初期値じゃないときにメニュー画像を表示
-        if (name != "" && price != "" && imageResId != 0) {
+        if (id != -1) {
             Image(
                 painter = painterResource(id = imageResId),
                 contentDescription = null,
@@ -108,10 +112,12 @@ fun PreviewMenu() {
     Column {
         Menu(
             modifier = Modifier,
+            id = 0,
             name = "ネギトロ丼",
             price = "700円",
             imageResId = R.drawable.negitoro_don,
-            selectCurrentMenu = { name, price, imageResId -> },
+            quantity = 0,
+            selectCurrentMenu = { id, name, price, imageResId, quantity -> },
         )
     }
 }

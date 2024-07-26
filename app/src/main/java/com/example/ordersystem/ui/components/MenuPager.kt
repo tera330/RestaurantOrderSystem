@@ -24,7 +24,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun MenuPager(
     modifier: Modifier = Modifier,
-    selectCurrentMenu: (String, String, Int) -> Unit,
+    selectCurrentMenu: (Int, String, String, Int, Int) -> Unit,
 ) {
     val itemsPerPage = 8
     val pageCount = (SUSHI_MENU.size + itemsPerPage - 1) / itemsPerPage
@@ -94,6 +94,6 @@ fun MenuPager(
 fun PreviewMenuPager() {
     MenuPager(
         modifier = Modifier,
-        selectCurrentMenu = { name, price, imageResId -> },
+        selectCurrentMenu = { id, name, price, imageResId, quantity -> },
     )
 }

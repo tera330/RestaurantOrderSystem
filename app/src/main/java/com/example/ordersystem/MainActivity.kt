@@ -45,11 +45,11 @@ class MainActivity : ComponentActivity() {
 
                     Home(
                         modifier = Modifier,
-                        selectCurrentMenu = { name, price, imageResId ->
-                            homeViewModel.selectCurrentMenu(name = name, price = price, imageResId = imageResId)
+                        selectCurrentMenu = { id, name, price, imageResId, quantity ->
+                            homeViewModel.selectCurrentMenu(id = id, name = name, price = price, imageResId = imageResId, quantity = quantity)
                         },
-                        addOrder = { name, price, imageResId ->
-                            homeViewModel.addOrder(name = name, price = price, imageResId = imageResId)
+                        addOrder = { id, name, price, imageResId, quantity ->
+                            homeViewModel.addOrder(id = id, name = name, price = price, imageResId = imageResId, quantity = quantity)
                         },
                         homeUiState = homeUiState,
                     )
@@ -63,8 +63,8 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun Home(
     modifier: Modifier = Modifier,
-    selectCurrentMenu: (String, String, Int) -> Unit,
-    addOrder: (String, String, Int) -> Unit,
+    selectCurrentMenu: (Int, String, String, Int, Int) -> Unit,
+    addOrder: (Int, String, String, Int, Int) -> Unit,
     homeUiState: HomeUiState,
 ) {
     // composableの背景用
@@ -115,8 +115,8 @@ fun GreetingPreview() {
     OrderSystemTheme {
         Home(
             modifier = Modifier,
-            selectCurrentMenu = { name, price, imageResId -> },
-            addOrder = { name, price, imageResId -> },
+            selectCurrentMenu = { id, name, price, imageResId, quantity -> },
+            addOrder = { id, name, price, imageResId, quantity -> },
             homeUiState = HomeUiState(),
         )
     }

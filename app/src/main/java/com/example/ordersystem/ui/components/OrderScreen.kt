@@ -32,13 +32,14 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.ordersystem.data.SUSHI_MENU
 import com.example.ordersystem.uistate.HomeUiState
 
 @Composable
 fun OrderScreen(
     modifier: Modifier,
     homeUiState: HomeUiState,
-    addOrder: (String, String, Int) -> Unit,
+    addOrder: (Int, String, String, Int, Int) -> Unit,
 ) {
     val orderCount = 1
     // UI開発時の仮注文リスト
@@ -55,10 +56,12 @@ fun OrderScreen(
             modifier =
                 modifier
                     .padding(2.dp),
+            id = homeUiState.currentMenu.id,
             name = homeUiState.currentMenu.name,
             price = homeUiState.currentMenu.price,
             imageResId = homeUiState.currentMenu.imageResId,
-            selectCurrentMenu = { name, price, imageResId -> },
+            quantity = homeUiState.currentMenu.quantity,
+            selectCurrentMenu = { id, name, price, imageResId, quantity -> },
         )
 
         Column(modifier.padding(10.dp)) {
@@ -91,8 +94,14 @@ fun OrderScreen(
                 Button(
                     onClick = {
                         // Log.d("result", homeUiState.currentOrderList.toString() + "追加前")
-                        addOrder(homeUiState.currentMenu.name, homeUiState.currentMenu.price, homeUiState.currentMenu.imageResId)
-                        // Log.d("result", homeUiState.currentOrderList.toString() + "追加後")
+                        addOrder(
+                            homeUiState.currentMenu.id,
+                            homeUiState.currentMenu.name,
+                            homeUiState.currentMenu.price,
+                            homeUiState.currentMenu.imageResId,
+                            homeUiState.currentMenu.quantity
+                        )
+                        Log.d("result", homeUiState.currentOrderList.toString() + "追加後")
                     },
                     shape = CircleShape,
                     contentPadding = PaddingValues(5.dp),
@@ -189,7 +198,7 @@ fun OrderScreen(
 fun PreviewOrderScreen() {
     OrderScreen(
         modifier = Modifier,
-        addOrder = { name, price, imagaResId -> },
+        addOrder = { id, name, price, imagaResId, quantity -> },
         homeUiState = HomeUiState(),
     )
 }

@@ -18,7 +18,7 @@ class HomeViewModel : ViewModel() {
         name: String,
         price: String,
         imageResId: Int,
-        quantity: Int
+        quantity: Int,
     ) {
         Log.d("result", homeUiState.currentMenu.toString() + "変更前")
         homeUiState =
@@ -29,7 +29,7 @@ class HomeViewModel : ViewModel() {
                         name = name,
                         price = price,
                         imageResId = imageResId,
-                        quantity =  quantity
+                        quantity = quantity,
                     ),
             )
         Log.d("result", homeUiState.currentMenu.toString() + "変更後")
@@ -41,25 +41,28 @@ class HomeViewModel : ViewModel() {
         name: String,
         price: String,
         imageResId: Int,
-        quantity: Int
+        quantity: Int,
     ) {
-        val newMenu = Menu(
-            id = id,
-            name = name,
-            price = price,
-            imageResId = imageResId,
-            quantity = 1 // 注文リストに追加した時点で１つ以上になるため
-        )
+        val newMenu =
+            Menu(
+                id = id,
+                name = name,
+                price = price,
+                imageResId = imageResId,
+                quantity = 1, // 注文リストに追加した時点で１つ以上になるため
+            )
 
         val existingMenu = homeUiState.currentOrderList.find { it.id == id }
         if (existingMenu != null) {
-            homeUiState.currentOrderList = homeUiState.currentOrderList.map {
-                if (it.id == id) it.copy(quantity = it.quantity + 1) else it
-            }.toMutableList()
+            homeUiState.currentOrderList =
+                homeUiState.currentOrderList.map {
+                    if (it.id == id) it.copy(quantity = it.quantity + 1) else it
+                }.toMutableList()
         } else {
-            homeUiState.currentOrderList = homeUiState.currentOrderList.toMutableList().apply {
-                add(newMenu)
-            }
+            homeUiState.currentOrderList =
+                homeUiState.currentOrderList.toMutableList().apply {
+                    add(newMenu)
+                }
         }
         homeUiState = homeUiState.copy(currentOrderList = homeUiState.currentOrderList)
     }
@@ -70,15 +73,16 @@ class HomeViewModel : ViewModel() {
         name: String,
         price: String,
         imageResId: Int,
-        quantity: Int
+        quantity: Int,
     ) {
-        val removeMenu = Menu(
-            id = id,
-            name = name,
-            price = price,
-            imageResId = imageResId,
-            quantity = quantity
-        )
+        val removeMenu =
+            Menu(
+                id = id,
+                name = name,
+                price = price,
+                imageResId = imageResId,
+                quantity = quantity,
+            )
 
         /*
         homeUiState = homeUiState.copy(
@@ -87,5 +91,13 @@ class HomeViewModel : ViewModel() {
             }
         )
          */
+    }
+
+    // メニューカテゴリの変更
+    fun selectCategory(category: String) {
+        homeUiState =
+            homeUiState.copy(
+                currentMenuCategory = category,
+            )
     }
 }

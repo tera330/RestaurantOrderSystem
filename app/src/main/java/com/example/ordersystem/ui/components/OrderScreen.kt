@@ -32,7 +32,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.ordersystem.data.SUSHI_MENU
 import com.example.ordersystem.uistate.HomeUiState
 
 @Composable
@@ -99,7 +98,7 @@ fun OrderScreen(
                             homeUiState.currentMenu.name,
                             homeUiState.currentMenu.price,
                             homeUiState.currentMenu.imageResId,
-                            homeUiState.currentMenu.quantity
+                            homeUiState.currentMenu.quantity,
                         )
                         Log.d("result", homeUiState.currentOrderList.toString() + "追加後")
                     },

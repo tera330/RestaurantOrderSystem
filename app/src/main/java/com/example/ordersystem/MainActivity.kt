@@ -103,7 +103,11 @@ fun Home(
                         .padding(top = 15.dp, bottom = 10.dp, start = 5.dp, end = 5.dp),
             ) {
                 MenuCategory(modifier = modifier, topMenu = TOP_MENU, selectCategory = selectCategory)
-                MenuPager(modifier = modifier, selectCurrentMenu = selectCurrentMenu, homeUiState = homeUiState)
+                MenuPager(
+                    modifier = modifier,
+                    selectCurrentMenu = selectCurrentMenu,
+                    homeUiState = homeUiState,
+                )
             }
 
             VerticalDivider(modifier = Modifier, thickness = 2.dp, color = Color.White)

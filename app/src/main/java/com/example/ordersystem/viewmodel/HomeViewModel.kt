@@ -1,16 +1,16 @@
 package com.example.ordersystem.viewmodel
 
 import android.util.Log
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import com.example.ordersystem.data.Menu
 import com.example.ordersystem.uistate.HomeUiState
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.update
 
 class HomeViewModel : ViewModel() {
-    var homeUiState by mutableStateOf(HomeUiState())
-        private set
+    private var _homeUiState = MutableStateFlow(HomeUiState())
+    val homeUiState: StateFlow<HomeUiState> = _homeUiState
 
     // メニューが選択されたとき
     fun selectCurrentMenu(
@@ -20,9 +20,9 @@ class HomeViewModel : ViewModel() {
         imageResId: Int,
         quantity: Int,
     ) {
-        Log.d("result", homeUiState.currentMenu.toString() + "変更前")
-        homeUiState =
-            homeUiState.copy(
+        Log.d("result", _homeUiState.value.currentMenu.toString() + "変更前")
+        _homeUiState.value =
+            homeUiState.value.copy(
                 currentMenu =
                     Menu(
                         id = id,
@@ -32,7 +32,7 @@ class HomeViewModel : ViewModel() {
                         quantity = quantity,
                     ),
             )
-        Log.d("result", homeUiState.currentMenu.toString() + "変更後")
+        Log.d("result", homeUiState.value.currentMenu.toString() + "変更後")
     }
 
     // メニューが選択され、＋ボタンが押されたとき
@@ -49,25 +49,34 @@ class HomeViewModel : ViewModel() {
                 name = name,
                 price = price,
                 imageResId = imageResId,
-                quantity = 1, // 注文リストに追加した時点で１つ以上になるため
+                quantity = 1,
             )
 
-        val existingMenu = homeUiState.currentOrderList.find { it.id == id }
-        if (existingMenu != null) {
-            homeUiState.currentOrderList =
-                homeUiState.currentOrderList.map {
-                    if (it.id == id) it.copy(quantity = it.quantity + 1) else it
-                }.toMutableList()
-        } else {
-            homeUiState.currentOrderList =
-                homeUiState.currentOrderList.toMutableList().apply {
+        val updatedOrderList =
+            _homeUiState.value.currentOrderList.toMutableList().apply {
+                val existingMenu = find { it.id == id }
+                if (existingMenu != null) {
+                    val updatedMenu = existingMenu.copy(quantity = existingMenu.quantity + 1)
+                    remove(existingMenu)
+                    add(updatedMenu)
+                } else {
                     add(newMenu)
                 }
+            }
+        val updateCurrentMenu =
+            _homeUiState.value.currentMenu.copy(
+                quantity = updatedOrderList.find { it.id == id }?.quantity ?: 0,
+            )
+
+        _homeUiState.update { currentState ->
+            currentState.copy(
+                currentOrderList = updatedOrderList,
+                currentMenu = updateCurrentMenu,
+            )
         }
-        homeUiState = homeUiState.copy(currentOrderList = homeUiState.currentOrderList)
     }
 
-    // メニューが選択され、ーボタンが押されたとき
+    // ーボタンを押されたとき
     fun removeOrder(
         id: Int,
         name: String,
@@ -75,28 +84,32 @@ class HomeViewModel : ViewModel() {
         imageResId: Int,
         quantity: Int,
     ) {
-        val removeMenu =
-            Menu(
-                id = id,
-                name = name,
-                price = price,
-                imageResId = imageResId,
-                quantity = quantity,
+        val updatedOrderList =
+            _homeUiState.value.currentOrderList.toMutableList().apply {
+                val existingMenu = find { it.id == id }
+                if (existingMenu != null && existingMenu.quantity > 0) {
+                    val updatedMenu = existingMenu.copy(quantity = existingMenu.quantity - 1)
+                    remove(existingMenu)
+                    add(updatedMenu)
+                }
+            }
+        val updateCurrentMenu =
+            _homeUiState.value.currentMenu.copy(
+                quantity = updatedOrderList.find { it.id == id }?.quantity ?: 0,
             )
 
-        /*
-        homeUiState = homeUiState.copy(
-            currentOrderList = homeUiState.currentOrderList.apply {
-                add(newMenu)
-            }
-        )
-         */
+        _homeUiState.update { currentState ->
+            currentState.copy(
+                currentOrderList = updatedOrderList,
+                currentMenu = updateCurrentMenu,
+            )
+        }
     }
 
     // メニューカテゴリの変更
     fun selectCategory(category: String) {
-        homeUiState =
-            homeUiState.copy(
+        _homeUiState.value =
+            _homeUiState.value.copy(
                 currentMenuCategory = category,
             )
     }

@@ -12,7 +12,7 @@ data class HomeUiState(
             imageResId = 0,
             quantity = 0,
         ),
-    var currentOrderList: MutableList<Menu> = mutableListOf(),
-    val totalOrderList: MutableList<Menu> = mutableListOf(),
+    var currentOrderList: List<Menu> = mutableListOf(),
+    val totalOrderList: List<Menu> = mutableListOf(),
     val totalPrice: Int = 0,
 )

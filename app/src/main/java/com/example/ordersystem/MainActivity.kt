@@ -16,6 +16,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
@@ -41,7 +43,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background,
                 ) {
-                    val homeUiState = homeViewModel.homeUiState
+                    val homeUiState by homeViewModel.homeUiState.collectAsState()
 
                     Home(
                         modifier = Modifier,
@@ -56,6 +58,9 @@ class MainActivity : ComponentActivity() {
                         },
                         addOrder = { id, name, price, imageResId, quantity ->
                             homeViewModel.addOrder(id = id, name = name, price = price, imageResId = imageResId, quantity = quantity)
+                        },
+                        removeOrder = { id, name, price, imageResId, quantity ->
+                            homeViewModel.removeOrder(id = id, name = name, price = price, imageResId = imageResId, quantity = quantity)
                         },
                         homeUiState = homeUiState,
                         selectCategory = { categoryName -> homeViewModel.selectCategory(categoryName) },
@@ -72,6 +77,7 @@ fun Home(
     modifier: Modifier = Modifier,
     selectCurrentMenu: (Int, String, String, Int, Int) -> Unit,
     addOrder: (Int, String, String, Int, Int) -> Unit,
+    removeOrder: (Int, String, String, Int, Int) -> Unit,
     homeUiState: HomeUiState,
     selectCategory: (String) -> Unit,
 ) {
@@ -110,6 +116,7 @@ fun Home(
                     modifier = modifier,
                     homeUiState = homeUiState,
                     addOrder = addOrder,
+                    removeOrder = removeOrder,
                 )
             }
         }
@@ -125,6 +132,7 @@ fun GreetingPreview() {
             modifier = Modifier,
             selectCurrentMenu = { id, name, price, imageResId, quantity -> },
             addOrder = { id, name, price, imageResId, quantity -> },
+            removeOrder = { id, name, price, imagaResId, quantity -> },
             homeUiState = HomeUiState(),
             selectCategory = {},
         )

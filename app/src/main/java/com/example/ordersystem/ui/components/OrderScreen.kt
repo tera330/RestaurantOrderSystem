@@ -39,11 +39,8 @@ fun OrderScreen(
     modifier: Modifier,
     homeUiState: HomeUiState,
     addOrder: (Int, String, String, Int, Int) -> Unit,
+    removeOrder: (Int, String, String, Int, Int) -> Unit,
 ) {
-    val orderCount = 1
-    // UI開発時の仮注文リスト
-    val orderList = listOf("まぐろ", "さば", "たまご", "えび", "まぐろ", "さば", "たまご", "えび")
-
     Column(
         modifier =
             modifier
@@ -70,12 +67,21 @@ fun OrderScreen(
                 horizontalArrangement = Arrangement.SpaceEvenly,
             ) {
                 Text(
-                    text = "${orderCount}皿",
+                    text = "${homeUiState.currentMenu.quantity}皿",
                     fontSize = 40.sp,
                     color = Color.White,
                 )
                 Button(
-                    onClick = { /*TODO*/ },
+                    onClick = {
+                        removeOrder(
+                            homeUiState.currentMenu.id,
+                            homeUiState.currentMenu.name,
+                            homeUiState.currentMenu.price,
+                            homeUiState.currentMenu.imageResId,
+                            homeUiState.currentMenu.quantity,
+                        )
+                        Log.d("result", homeUiState.currentOrderList.toString() + "追加後")
+                    },
                     shape = CircleShape,
                     contentPadding = PaddingValues(5.dp),
                     colors =
@@ -92,7 +98,6 @@ fun OrderScreen(
                 }
                 Button(
                     onClick = {
-                        // Log.d("result", homeUiState.currentOrderList.toString() + "追加前")
                         addOrder(
                             homeUiState.currentMenu.id,
                             homeUiState.currentMenu.name,
@@ -140,11 +145,11 @@ fun OrderScreen(
                         .height(250.dp)
                         .padding(5.dp),
                 ) {
-                    itemsIndexed(orderList) { index, item ->
+                    itemsIndexed(homeUiState.currentOrderList) { index, item ->
                         Row(modifier = modifier.padding(5.dp)) {
                             Text(
                                 modifier = modifier.padding(5.dp),
-                                text = item,
+                                text = item.name,
                                 fontSize = 20.sp,
                                 fontFamily = FontFamily.Serif,
                                 fontWeight = FontWeight.Bold,
@@ -164,7 +169,7 @@ fun OrderScreen(
                                         .padding(5.dp),
                             ) {
                                 Text(
-                                    text = "2",
+                                    text = item.quantity.toString(),
                                     fontSize = 24.sp,
                                     color = White,
                                 )
@@ -198,6 +203,7 @@ fun PreviewOrderScreen() {
     OrderScreen(
         modifier = Modifier,
         addOrder = { id, name, price, imagaResId, quantity -> },
+        removeOrder = { id, name, price, imagaResId, quantity -> },
         homeUiState = HomeUiState(),
     )
 }

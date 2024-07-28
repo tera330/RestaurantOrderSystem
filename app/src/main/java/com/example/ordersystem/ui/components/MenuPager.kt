@@ -4,6 +4,7 @@ import PagingButton
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -11,12 +12,19 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.example.ordersystem.data.DESSERT_MENU
 import com.example.ordersystem.data.NOODLE_MENU
 import com.example.ordersystem.data.RICE_BOWL_MENU
@@ -70,6 +78,7 @@ fun MenuPager(
             modifier =
                 modifier
                     .padding(start = 5.dp, end = 5.dp),
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             PagingButton(
                 modifier = Modifier,
@@ -83,7 +92,21 @@ fun MenuPager(
                     }
                 },
             )
-            Spacer(modifier.weight(1f))
+            Spacer(modifier = modifier.weight(1f))
+            Button(
+                onClick = {},
+                shape = RoundedCornerShape(6.dp),
+                colors = ButtonDefaults.buttonColors(Color(218, 165, 32)),
+                contentPadding = PaddingValues(start = 15.dp, end = 15.dp),
+                modifier = modifier,
+            ) {
+                Text(
+                    text = "お会計",
+                    fontSize = 50.sp,
+                    fontFamily = FontFamily.Serif,
+                )
+            }
+            Spacer(modifier = modifier.weight(1f))
             PagingButton(
                 modifier = Modifier,
                 text = "次へ",

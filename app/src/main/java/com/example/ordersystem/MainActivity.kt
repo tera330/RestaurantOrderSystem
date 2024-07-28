@@ -62,6 +62,7 @@ class MainActivity : ComponentActivity() {
                         removeOrder = { id, name, price, imageResId, quantity ->
                             homeViewModel.removeOrder(id = id, name = name, price = price, imageResId = imageResId, quantity = quantity)
                         },
+                        confirmOrder = { homeViewModel.confirmOrder() },
                         homeUiState = homeUiState,
                         selectCategory = { categoryName -> homeViewModel.selectCategory(categoryName) },
                     )
@@ -78,6 +79,7 @@ fun Home(
     selectCurrentMenu: (Int, String, String, Int, Int) -> Unit,
     addOrder: (Int, String, String, Int, Int) -> Unit,
     removeOrder: (Int, String, String, Int, Int) -> Unit,
+    confirmOrder: () -> Unit,
     homeUiState: HomeUiState,
     selectCategory: (String) -> Unit,
 ) {
@@ -117,6 +119,7 @@ fun Home(
                     homeUiState = homeUiState,
                     addOrder = addOrder,
                     removeOrder = removeOrder,
+                    confirmOrder = confirmOrder,
                 )
             }
         }
@@ -133,6 +136,7 @@ fun GreetingPreview() {
             selectCurrentMenu = { id, name, price, imageResId, quantity -> },
             addOrder = { id, name, price, imageResId, quantity -> },
             removeOrder = { id, name, price, imagaResId, quantity -> },
+            confirmOrder = {},
             homeUiState = HomeUiState(),
             selectCategory = {},
         )

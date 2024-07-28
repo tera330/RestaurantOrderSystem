@@ -40,6 +40,7 @@ fun OrderScreen(
     homeUiState: HomeUiState,
     addOrder: (Int, String, String, Int, Int) -> Unit,
     removeOrder: (Int, String, String, Int, Int) -> Unit,
+    confirmOrder: () -> Unit,
 ) {
     Column(
         modifier =
@@ -179,7 +180,9 @@ fun OrderScreen(
                     }
                 }
                 Button(
-                    onClick = { /*TODO*/ },
+                    onClick = {
+                        confirmOrder()
+                    },
                     shape = RoundedCornerShape(6.dp),
                     colors = ButtonDefaults.buttonColors(Color(218, 165, 32)),
                     modifier =
@@ -205,5 +208,6 @@ fun PreviewOrderScreen() {
         addOrder = { id, name, price, imagaResId, quantity -> },
         removeOrder = { id, name, price, imagaResId, quantity -> },
         homeUiState = HomeUiState(),
+        confirmOrder = {},
     )
 }

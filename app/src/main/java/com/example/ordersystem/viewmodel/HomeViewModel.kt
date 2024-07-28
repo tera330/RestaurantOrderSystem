@@ -113,4 +113,26 @@ class HomeViewModel : ViewModel() {
                 currentMenuCategory = category,
             )
     }
+
+    // 現在の注文リストを確定
+    fun confirmOrder() {
+        val updateTotalOrderList = _homeUiState.value.totalOrderList.toMutableList()
+
+        _homeUiState.value.currentOrderList.forEach { currentOrder ->
+            val existingOrder = updateTotalOrderList.find { it.id == currentOrder.id }
+            if (existingOrder != null) { // すでにtotalOrderListに同じidの注文アイテムがあれば
+                val updateOrder = existingOrder.copy(quantity = existingOrder.quantity + currentOrder.quantity)
+                updateTotalOrderList.remove(existingOrder)
+                updateTotalOrderList.add(updateOrder)
+            } else {
+                updateTotalOrderList.add(currentOrder)
+            }
+            _homeUiState.value =
+                _homeUiState.value.copy(
+                    totalOrderList = updateTotalOrderList,
+                    currentOrderList = mutableListOf(),
+                )
+            Log.d("result", _homeUiState.value.totalOrderList.toString() + "合計")
+        }
+    }
 }
